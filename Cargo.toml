@@ -1,0 +1,68 @@
+[package]
+name = "cat_tongue"
+version = "0.1.0"
+authors = ["aki <aki.akaguma@hotmail.com>"]
+description = """
+This is a modified hot_dog of Dioxus sample.
+"""
+keywords = ["webapp"]
+categories = ["desktop", "android"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+edition = "2021"
+rust-version = "1.90.0"
+repository = "https://github.com/aki-akaguma/cat_tongue"
+
+[dependencies]
+dioxus = { version = "0.7.0-rc.3", features = ["router", "fullstack"] }
+
+anyhow = { version = "1.0" }
+reqwest = { version = "0.12", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+
+rusqlite = { version = "0.37", optional = true }
+async-std = { version = "*", optional = true }
+
+[target.'cfg(target_os = "android")'.dependencies]
+openssl = { version = "0.10", features = ["vendored"] }
+
+[features]
+default = []
+
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop", "dep:rusqlite"]
+mobile = ["dioxus/mobile"]
+server = ["dioxus/server", "dep:rusqlite"]
+
+backend_delay = ["async-std"]
+backend_text = []
+debian_build = []
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"
+
+[package.metadata.deb]
+features = ["debian_build"]
+section = "AAA-webapp"
+priority = "optional"
+maintainer = "aki <aki.akaguma@hotmail.com>"
+extended-description = """\
+This program is a modified hot_dog of Dioxus sample.
+"""
+depends = "$auto"
+separate-debug-symbols = true
+
+#assets = [
+#    ["target/release/aki-gsub", "usr/bin/aki-gsub", "755"],
+#    ["target/rust-version-info.txt", "usr/share/doc/aki-gsub/", "644"],
+#    ["README.md", "usr/share/doc/aki-gsub/", "644"],
+#]
