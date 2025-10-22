@@ -28,7 +28,7 @@ publisher = "MyCompany"
 #copyright = ""
 category = "desktop"
 short_description = "a modified dioxus sample."
-long_description = "This is a modified version of the Dioxus sample."
+long_description = "This is a modified version of the Dioxus sample hot_dog."
 deb = { section = "AAA-desktop", priority = "optional", files = {} }
 
 #[bundle.deb]

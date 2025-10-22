@@ -3,7 +3,7 @@ name = "cat_tongue"
 version = "0.1.0"
 authors = ["aki <aki.akaguma@hotmail.com>"]
 description = """
-This is a modified hot_dog of Dioxus sample.
+This is a modified version of the Dioxus sample hot_dog.
 """
 keywords = ["webapp"]
 categories = ["desktop", "android"]
@@ -50,17 +50,17 @@ inherits = "dev"
 [profile.android-dev]
 inherits = "dev"
 
-[package.metadata.deb]
-features = ["debian_build"]
-section = "AAA-webapp"
-priority = "optional"
-maintainer = "aki <aki.akaguma@hotmail.com>"
-extended-description = """\
-This program is a modified hot_dog of Dioxus sample.
-"""
-depends = "$auto"
-separate-debug-symbols = true
-
+#[package.metadata.deb]
+#features = ["debian_build"]
+#section = "AAA-webapp"
+#priority = "optional"
+#maintainer = "aki <aki.akaguma@hotmail.com>"
+#extended-description = """\
+#This program is a modified hot_dog of Dioxus sample.
+#"""
+#depends = "$auto"
+#separate-debug-symbols = true
+#
 #assets = [
 #    ["target/release/aki-gsub", "usr/bin/aki-gsub", "755"],
 #    ["target/rust-version-info.txt", "usr/share/doc/aki-gsub/", "644"],
