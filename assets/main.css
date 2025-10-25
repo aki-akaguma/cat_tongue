@@ -9,6 +9,13 @@ html, body {
     margin: 0;
 }
 
+button {
+    cursor: grab;
+}
+button:disabled {
+    cursor: not-allowed;
+}
+
 #main {
     display: flex;
     flex-direction: column;
@@ -85,6 +92,13 @@ a#heart {
     border-radius: 5px;
 }
 
+#handleft, #handright {
+    background-color: white;
+    color: red;
+    padding: 5px;
+    border-radius: 5px;
+}
+
 #skip, #save {
     padding: 5px 30px 5px 30px;
     border-radius: 3px;
@@ -118,6 +132,11 @@ a#heart {
     display: flex;
     flex-direction: column;
     padding: 10px;
+}
+
+#favorites-navi {
+    display: flex;
+    justify-content: center;
 }
 
 #favorites-container {

@@ -25,12 +25,12 @@ thread_local! {
 
 // Query the database and return the last 20 cats and their url
 #[cfg_attr(not(feature = "desktop"), server)]
-#[get("/api/cats")]
-pub async fn list_cats() -> Result<Vec<(usize, String)>> {
+//#[get("/api/cats")]
+pub async fn list_cats(offset: usize) -> Result<Vec<(usize, String)>> {
     let cats = DB.with(|db| {
-        db.prepare("SELECT id, url FROM cats ORDER BY id DESC LIMIT 20")
+        db.prepare("SELECT id, url FROM cats ORDER BY id DESC LIMIT 20 OFFSET ?1")
             .unwrap()
-            .query_map([], |row| Ok((row.get(0)?, row.get(1)?)))
+            .query_map([&offset], |row| Ok((row.get(0)?, row.get(1)?)))
             .unwrap()
             .map(|r| r.unwrap())
             .collect()
@@ -43,7 +43,22 @@ pub async fn list_cats() -> Result<Vec<(usize, String)>> {
 }
 
 #[cfg_attr(not(feature = "desktop"), server)]
-#[delete("/api/cats/{id}")]
+pub async fn count_of_cats() -> Result<usize> {
+    let count: usize = DB.with(|db| {
+        db.prepare("SELECT count(*) FROM cats")
+            .unwrap()
+            .query_one([], |row| Ok(row.get(0)?))
+            .unwrap()
+    });
+    //
+    #[cfg(feature = "backend_delay")]
+    let _ = sleep_x(2000).await;
+    //
+    Ok(count)
+}
+
+#[cfg_attr(not(feature = "desktop"), server)]
+//#[delete("/api/cats/{id}")]
 pub async fn delete_cat(id: usize) -> Result<()> {
     DB.with(|f| f.execute("DELETE FROM cats WHERE id = (?1)", [id]))?;
     //
@@ -54,7 +69,7 @@ pub async fn delete_cat(id: usize) -> Result<()> {
 }
 
 #[cfg_attr(not(feature = "desktop"), server)]
-#[post("/api/cats")]
+//#[post("/api/cats")]
 pub async fn save_cat(image: String) -> Result<()> {
     #[cfg(feature = "backend_text")]
     {
