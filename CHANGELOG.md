@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- `base_dir` of database file
 - page navigations on the favorites view
 
 ### Changed
+- css: `cursor` of button to `pointer`
 - deb config
 
 ## [0.1.0] (2025-10-22)

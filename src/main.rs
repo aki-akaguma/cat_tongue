@@ -7,23 +7,18 @@ mod backend;
 mod components;
 mod views;
 
-#[derive(Debug, Clone, Routable, PartialEq)]
-#[rustfmt::skip]
-enum Route {
-    #[layout(NavBar)]
-    #[route("/")]
-    CatView,
-    #[route("/favorites")]
-    Favorites,
-    // We can collect the segments of the URL into a Vec<String>
-    #[route("/:..segments")]
-    PageNotFound { segments: Vec<String> },
-}
-
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
 
 fn main() {
+    /*
+    #[cfg(not(feature = "server"))]
+    {
+        let backend_url = "https://hot-dog.fly.dev";
+        dioxus_fullstack::set_server_url(backend_url);
+    }
+    */
+
     dioxus::launch(App);
 }
 
@@ -36,4 +31,17 @@ fn App() -> Element {
 
         Router::<Route> {}
     }
+}
+
+#[derive(Debug, Clone, Routable, PartialEq)]
+#[rustfmt::skip]
+enum Route {
+    #[layout(NavBar)]
+    #[route("/")]
+    CatView,
+    #[route("/favorites")]
+    Favorites,
+    // We can collect the segments of the URL into a Vec<String>
+    #[route("/:..segments")]
+    PageNotFound { segments: Vec<String> },
 }

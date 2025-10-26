@@ -23,6 +23,7 @@ script = []
 [bundle]
 identifier = "com.mycompany"
 publisher = "MyCompany"
+#icon = ["assets/cat-tongue.svg"]
 #icon = ["assets/icon.png"]
 #resource = [""]
 #copyright = ""

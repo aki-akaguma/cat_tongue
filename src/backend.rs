@@ -7,8 +7,13 @@ use dioxus::prelude::*;
 #[cfg(any(feature = "server", feature = "desktop"))]
 thread_local! {
     pub static DB: rusqlite::Connection = {
+        let db_path = {
+            let base_dir = base_dir();
+            let db_file = "cattongue.db";
+            format!("{base_dir}/{db_file}")
+        };
         // Open the database from the persisted "cattongue.db" file
-        let conn = rusqlite::Connection::open("cattongue.db").expect("Failed to open database");
+        let conn = rusqlite::Connection::open(db_path).expect("Failed to open database");
 
         // Create the "cats" table if it doesn't already exist
         conn.execute_batch(
@@ -21,6 +26,37 @@ thread_local! {
         // Return the connection
         conn
     };
+}
+
+#[cfg(any(feature = "server", feature = "desktop"))]
+fn base_dir() -> String {
+    #[allow(unused_assignments)]
+    let mut base_dir = ".".to_string();
+    #[cfg(feature = "desktop")]
+    {
+        base_dir = base_dir_on_desktop();
+    }
+    #[cfg(feature = "server")]
+    {
+        base_dir = "/var/local/cat_tongue".to_string();
+    }
+    return base_dir;
+}
+
+#[cfg(feature = "desktop")]
+fn base_dir_on_desktop() -> String {
+    let key = "HOME";
+    match std::env::var(key) {
+        Ok(val) => {
+            let base_dir = format!("{val}/.cat_tongue");
+            let _ = std::fs::create_dir(&base_dir);
+            return base_dir;
+        }
+        Err(e) => {
+            eprintln!("couldn't interpret {key}: {e}");
+            return "".to_string();
+        }
+    }
 }
 
 // Query the database and return the last 20 cats and their url
