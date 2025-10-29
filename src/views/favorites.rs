@@ -27,31 +27,31 @@ pub fn Favorites() -> Element {
 
     rsx! {
         div { id: "favorites",
-            div {
-                id: "favorites-navi",
+            div { id: "favorites-navi",
                 div {
                     HandLeft {
-                        offset: offset,
-                        count_of_cats: count_of_cats,
-                        favorites: favorites,
-                        is_loading: is_loading,
+                        offset,
+                        count_of_cats,
+                        favorites,
+                        is_loading,
                     }
                     " {offset+1} / {count_of_cats} "
                     HandRight {
-                        offset: offset,
-                        count_of_cats: count_of_cats,
-                        favorites: favorites,
-                        is_loading: is_loading,
+                        offset,
+                        count_of_cats,
+                        favorites,
+                        is_loading,
                     }
                 }
             }
             div { id: "favorites-container",
-                for (id, url) in favorites.cloned() {
+                for (id , url) in favorites.cloned() {
                     FavoriteDog {
-                        id:id, url: url,
-                        count_of_cats: count_of_cats,
-                        favorites: favorites,
-                        is_loading: is_loading
+                        id,
+                        url,
+                        count_of_cats,
+                        favorites,
+                        is_loading,
                     }
                 }
             }
@@ -71,16 +71,19 @@ pub fn HandLeft(
 ) -> Element {
     rsx! {
         if *offset.read() >= 20 {
-            button { onclick: move |_| async move {
-                is_loading.set(true);
-                let curr = *offset.read();
-                if curr >= 20 {
-                    offset.set(curr-20);
-                }
-                favorites.restart();
-            }, id: "handleft", "👈" }
-        }
-        else {
+            button {
+                onclick: move |_| async move {
+                    is_loading.set(true);
+                    let curr = *offset.read();
+                    if curr >= 20 {
+                        offset.set(curr - 20);
+                    }
+                    favorites.restart();
+                },
+                id: "handleft",
+                "👈"
+            }
+        } else {
             button { disabled: true, id: "handleft", "🫷" }
         }
     }
@@ -95,14 +98,17 @@ pub fn HandRight(
 ) -> Element {
     rsx! {
         if *offset.read() + 20 < *count_of_cats.read() {
-            button { onclick: move |_| async move {
-                is_loading.set(true);
-                let curr = *offset.read();
-                    offset.set(curr+20);
-                favorites.restart();
-            }, id:"handright", "👉" }
-        }
-        else {
+            button {
+                onclick: move |_| async move {
+                    is_loading.set(true);
+                    let curr = *offset.read();
+                    offset.set(curr + 20);
+                    favorites.restart();
+                },
+                id: "handright",
+                "👉"
+            }
+        } else {
             button { disabled: true, id: "handright", "🫸" }
         }
     }
@@ -118,16 +124,18 @@ pub fn FavoriteDog(
 ) -> Element {
     // Render a div for each photo using the cat's ID as the list key
     rsx! {
-        div {
-            key: "{id}",
-            class: "favorite-cat",
+        div { key: "{id}", class: "favorite-cat",
             img { src: "{url}" }
-            button { onclick: move |_| async move {
-                is_loading.set(true);
-                _ = crate::backend::delete_cat(id).await;
-                count_of_cats.restart();
-                favorites.restart();
-            }, id: "delete", "🚫" }
+            button {
+                onclick: move |_| async move {
+                    is_loading.set(true);
+                    _ = crate::backend::delete_cat(id).await;
+                    count_of_cats.restart();
+                    favorites.restart();
+                },
+                id: "delete",
+                "🚫"
+            }
         }
     }
 }

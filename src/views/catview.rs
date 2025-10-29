@@ -34,11 +34,15 @@ pub fn CatView() -> Element {
         }
         div { id: "buttons",
             button { onclick: move |_| img_src.restart(), id: "skip", "skip" }
-            button { onclick: move |_| async move {
-                let current = img_src.cloned().unwrap();
-                img_src.restart();
-                _ = crate::backend::save_cat(current).await;
-            }, id: "save", "save!" }
+            button {
+                onclick: move |_| async move {
+                    let current = img_src.cloned().unwrap();
+                    img_src.restart();
+                    _ = crate::backend::save_cat(current).await;
+                },
+                id: "save",
+                "save!"
+            }
         }
         if *is_loading.read() {
             OverlaySpinner {}

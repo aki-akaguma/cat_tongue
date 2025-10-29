@@ -8,7 +8,10 @@ mod components;
 mod views;
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
+#[cfg(not(feature = "inline_style"))]
 const MAIN_CSS: Asset = asset!("/assets/main.css");
+#[cfg(feature = "inline_style")]
+const MAIN_CSS: &str = const_css_minify::minify!("../assets/main.css");
 
 fn main() {
     /*
@@ -27,9 +30,25 @@ fn App() -> Element {
     rsx! {
         document::Link { rel: "icon", href: FAVICON }
         //document::Link { rel: "stylesheet", href: MAIN_CSS }
-        document::Stylesheet { href: MAIN_CSS }
+        MyStyle {}
 
         Router::<Route> {}
+    }
+}
+
+#[cfg(not(feature = "inline_style"))]
+#[component]
+fn MyStyle() -> Element {
+    rsx! {
+        document::Stylesheet { href: MAIN_CSS }
+    }
+}
+
+#[cfg(feature = "inline_style")]
+#[component]
+fn MyStyle() -> Element {
+    rsx! {
+        style { "{MAIN_CSS}" }
     }
 }
 
