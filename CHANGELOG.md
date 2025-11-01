@@ -7,13 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- supports of `cargo deb`
-- `base_dir` of database file
-- page navigations on the favorites view
+* supports of `cargo deb`
+* `base_dir` of database file
+* page navigations on the favorites view
 
 ### Changed
-- css: `cursor` of button to `pointer`
-- deb config
+* updated: dioxus(0.7.0)
+* css: `cursor` of button to `pointer`
+* deb config
 
 ## [0.1.0] (2025-10-22)
 ### Added
