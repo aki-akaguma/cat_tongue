@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * page navigations on the favorites view
 
 ### Changed
-* updated: dioxus(0.7.0)
+* updated: dioxus(0.7.1)
 * css: `cursor` of button to `pointer`
 * deb config
 
