@@ -1,6 +1,9 @@
 use anyhow::Result;
 
 #[allow(unused_imports)]
+use std::path::PathBuf;
+
+#[allow(unused_imports)]
 use dioxus::prelude::*;
 
 // The database is only available to server code
@@ -8,9 +11,10 @@ use dioxus::prelude::*;
 thread_local! {
     pub static DB: rusqlite::Connection = {
         let db_path = {
-            let base_dir = base_dir();
+            let mut data_dir = data_dir();
             let db_file = "cattongue.db";
-            format!("{base_dir}/{db_file}")
+            data_dir.push(db_file);
+            data_dir
         };
         // Open the database from the persisted "cattongue.db" file
         let conn = rusqlite::Connection::open(db_path).expect("Failed to open database");
@@ -29,34 +33,33 @@ thread_local! {
 }
 
 #[cfg(any(feature = "server", feature = "desktop"))]
-fn base_dir() -> String {
+fn data_dir() -> PathBuf {
     #[allow(unused_assignments)]
-    let mut base_dir = ".".to_string();
+    let mut data_dir = PathBuf::from(".");
     #[cfg(feature = "desktop")]
     {
-        base_dir = base_dir_on_desktop();
+        data_dir = data_dir_on_desktop();
     }
     #[cfg(feature = "server")]
     {
-        base_dir = "/var/local/cat_tongue".to_string();
+        data_dir = PathBuf::from("/var/local/data/cat_tongue");
     }
-    return base_dir;
+    return data_dir;
 }
 
 #[cfg(feature = "desktop")]
-fn base_dir_on_desktop() -> String {
-    let key = "HOME";
-    match std::env::var(key) {
-        Ok(val) => {
-            let base_dir = format!("{val}/.cat_tongue");
-            let _ = std::fs::create_dir(&base_dir);
-            return base_dir;
+fn data_dir_on_desktop() -> PathBuf {
+    let mut data_dir = match std::env::home_dir() {
+        Some(home) => home,
+        None => {
+            eprintln!("could NOT get `home_dir()`");
+            PathBuf::from(".")
         }
-        Err(e) => {
-            eprintln!("couldn't interpret {key}: {e}");
-            return "".to_string();
-        }
-    }
+    };
+    data_dir.push(".data");
+    data_dir.push("cat_tongue");
+    let _ = std::fs::create_dir(&data_dir);
+    data_dir
 }
 
 // Query the database and return the last 20 cats and their url
